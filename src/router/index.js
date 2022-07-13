@@ -1,14 +1,16 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import login from '@/views/login'
 
 Vue.use(VueRouter)
-
+//路由页面懒加载
 const routes = [
   {
+    path: '/',
+    redirect: '/login'
+  },
+  {
     path: '/login',
-    name: 'login',
-    components: login
+    component: () => import('@/views/Login')
   }
 ]
 
