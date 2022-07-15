@@ -14,7 +14,7 @@ module.exports = {
   rules: {
     'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
     'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
-    // 'eol-last': 'off'
+    // 'eol-last': 'off',
     'spaced-comment': 'off',
     'vue/multi-word-component-names': 'off'
     // 'no-trailing-spaces': 'off'

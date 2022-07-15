@@ -5,12 +5,31 @@ Vue.use(VueRouter)
 //路由页面懒加载
 const routes = [
   {
-    path: '/',
-    redirect: '/login'
-  },
-  {
     path: '/login',
     component: () => import('@/views/Login')
+  },
+  {
+    path: '/',
+    component: () => import('@/views/Layout'),
+    redirect: '/ ',
+    children: [
+      {
+        path: '/ ',
+        component: () => import('@/views/Home')
+      },
+      {
+        path: '/video',
+        component: () => import('@/views/Video')
+      },
+      {
+        path: '/qa',
+        component: () => import('@/views/QA')
+      },
+      {
+        path: '/my',
+        component: () => import('@/views/My')
+      }
+    ]
   }
 ]
 

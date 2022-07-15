@@ -94,7 +94,7 @@ export default {
         console.log('登录成功', res)
         // 存储token
         this.$store.commit('setUser', res.data.data)
-        this.$router.push('/peee')
+        this.$router.push('/my')
         this.$toast.success('登录成功')
       } catch (e) {
         // this.$toast.fail('登录失败')
