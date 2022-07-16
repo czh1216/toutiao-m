@@ -97,8 +97,6 @@ export default {
         this.$router.push('/my')
         this.$toast.success('登录成功')
       } catch (e) {
-        // this.$toast.fail('登录失败')
-        // console.log(e)
         const status = e.response.status
         let message = '登录错误，请刷新！'
         if (status === 400) {
