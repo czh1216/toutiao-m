@@ -7,7 +7,7 @@ const request = axios.create({
 export default request
 
 // 添加请求拦截器
-axios.interceptors.request.use(
+request.interceptors.request.use(
   (config) => {
     // console.log(config)
     // 在发送请求之前做些什么

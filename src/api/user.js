@@ -1,5 +1,7 @@
 import request from '@/utils/request'
 import store from '@/store'
+export * from './channel'
+export * from './news'
 
 /**
  * 登录

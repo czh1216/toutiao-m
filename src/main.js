@@ -8,8 +8,8 @@ import 'vant/lib/index'//加载Vant全局样式
 
 import Vant from 'vant' //引入 vant 导入所有组件
 import 'vant/lib/index.css'
-Vue.use(Vant)
 
+Vue.use(Vant)
 Vue.config.productionTip = false
 
 new Vue({
