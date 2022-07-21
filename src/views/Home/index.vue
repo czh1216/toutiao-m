@@ -2,7 +2,9 @@
   <div>
     <van-nav-bar class="navbar">
       <template #title>
-        <van-button round><van-icon name="search" />搜索</van-button>
+        <van-button round @click="$router.push('/search')">
+          <van-icon name="search" />搜索
+          </van-button>
       </template>
     </van-nav-bar>
 
@@ -71,7 +73,7 @@ export default {
           //登录状态
           const { data } = await getMyChannels()
           this.myChannels = data.data.channels
-          console.log(11)
+          // console.log(11)
         }
       } catch (e) {
         this.$toast.fail('请重新获取列表')

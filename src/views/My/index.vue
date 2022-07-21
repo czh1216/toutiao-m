@@ -20,7 +20,7 @@
           </van-col>
           <van-col span="11">
             <van-row class="code-row" type="flex" align="center" justify="end">
-              <van-button class="code-btn" size="mini" round>编辑资料</van-button>
+              <van-button class="code-btn" size="mini" round @click="$router.push('/editdata')">编辑资料</van-button>
             </van-row>
           </van-col>
         </van-row>
@@ -110,6 +110,9 @@ export default {
     register () {
       this.$router.push('/login')
     },
+    // editdata () {
+    //   this.$router.push('/editdata')
+    // },
     async getUserInfo () {
       if (this.isLogin) {
         try {
