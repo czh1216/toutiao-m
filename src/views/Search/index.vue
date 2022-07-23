@@ -22,8 +22,8 @@
 
 <script>
 import Searchsuggest from './components/Searchsuggest.vue'
-import Searchhistory from './components/Searchhistory.vue'
-import Searchresult from './components/Searchresult.vue'
+import Searchhistory from './components/SearchHistory'
+import Searchresult from './components/SearchResult'
 export default {
   data () {
     return {

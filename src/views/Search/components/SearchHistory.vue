@@ -21,10 +21,8 @@
 </template>
 
 <script>
-/* eslint-disable */
-// import { getHistory } from '@/utils'
 export default {
-  data() {
+  data () {
     return {
       show: false,
       historys: []
@@ -36,22 +34,22 @@ export default {
       required: true
     }
   },
-  created() {
+  created () {
     this.historys = this.$store.state.history
     // console.log(this.historys)
   },
   methods: {
-    delHistory(ele) {
+    delHistory (ele) {
       const res = this.historys.indexOf(ele)
-      // console.log(res)
+      console.log(res)
       this.historys.splice(0, 1)
       this.$store.commit('delHistorys', this.historys)
     },
-    delAll() {
+    delAll () {
       this.historys = []
       this.$store.commit('delHistorys', this.historys)
     },
-    addSearch(ele) {
+    addSearch (ele) {
       this.$emit('addSearch', ele)
     }
   }
