@@ -1,220 +1,228 @@
 <template>
-  <div>
-    <van-nav-bar class="navbar">
+  <div class="home-template">
+    <!-- 顶部标题 -->
+    <van-nav-bar fixed>
       <template #title>
-        <van-button round @click="$router.push('/search')">
-          <van-icon name="search" />搜索
-          </van-button>
+        <van-button @click="$router.push('/search')">
+          <van-icon name="search" />
+          <span>搜索 </span>
+        </van-button>
       </template>
     </van-nav-bar>
-
-    <van-tabs swipeable v-model="active">
-      <van-tab v-for="item in myChannels" :key="item.id" :title="item.name">
-        <ArticleList :id="item.id"></ArticleList>
+    <!-- 顶部导航 -->
+    <van-tabs v-model="active" swipeable animated>
+      <van-tab
+        :title="ele.name"
+        :name="index"
+        v-for="(ele, index) in channelList"
+        :key="index"
+      >
+        <ArticleList :id="ele.id"></ArticleList>
       </van-tab>
+      <div slot="nav-right" class="hamburger-btn" @click="isShow">
+        <i class="iconfont icon-hanbaocaidan"></i>
+      </div>
     </van-tabs>
-
-    <span class="toutiao toutiao-gengduo" @click="showPopup"></span>
-    <Edit
+    <EditChannel
       ref="popup"
-      :myChannels="myChannels"
-      @del-mychanel="delMychannel"
-      @change-active="changeActive"
-      @add-mychannel="addMyChannel"
-    ></Edit>
+      :list="channelList"
+      :active="active"
+      @delChannel="delChannel"
+      @cutChannel="cutChannel"
+      @addChannel="addChannel"
+    ></EditChannel>
   </div>
 </template>
 
 <script>
-import {
-  getMyChannels,
-  getLocal,
-  setMyLocal,
-  delMyChannel,
-  addMyChannel
-} from '@/api/channel'
-import ArticleList from './component/ArticleList.vue'
-import Edit from './component/Edit.vue'
+import EditChannel from '@/components/EditChannel'
+import ArticleList from '@/components/ArticleList.vue'
+import { getChannel, delChannel, addChannel } from '@/API/channel'
+import { GetChannel, SetChannel } from '@/utils/auth'
+
 export default {
   data () {
     return {
-      myChannels: [],
-      active: 0
+      active: 0,
+      activeName: '',
+      channelList: []
+    }
+  },
+  computed: {
+    user () {
+      // 两个感叹号转换为布尔值
+      return !!this.$store.state.user.token
+    }
+  },
+  created () {
+    this.getChannel()
+  },
+  methods: {
+    async getChannel () {
+      if (!this.user) {
+        const channel = GetChannel()
+        if (channel) {
+          this.channelList = channel
+        } else {
+          const { data } = await getChannel()
+          this.channelList = data.data.channels
+        }
+      } else {
+        const { data } = await getChannel()
+        this.channelList = data.data.channels
+      }
+      // console.log(this.channelList)
+    },
+    isShow () {
+      // console.log(this.$refs.popup)
+      this.$refs.popup.show = !this.$refs.show
+    },
+    // 删除
+    async delChannel (id) {
+      this.channelList = this.channelList.filter((ele) => ele.id !== id)
+      if (!this.user) {
+        SetChannel(this.channelList)
+        this.$toast('删除成功')
+      } else {
+        try {
+          await delChannel(id)
+          this.$toast('删除成功')
+        } catch (err) {
+          this.$toast('删除失败')
+        }
+      }
+    },
+    // 切换
+    cutChannel (index) {
+      this.active = index
+    },
+    // 添加
+    async addChannel (ele) {
+      this.channelList.push(ele)
+      if (!this.user) {
+        SetChannel(this.channelList)
+        this.$toast('添加成功')
+      } else {
+        try {
+          await addChannel(ele.id, this.channelList.length)
+          this.$toast('添加成功')
+        } catch (err) {
+          this.$toast('添加失败')
+        }
+      }
     }
   },
   components: {
     ArticleList,
-    Edit
-  },
-  created () {
-    // 获取我的频道列表
-    this.getMyChannels()
-  },
-  computed: {
-    isLogin () {
-      return !!this.$store.state.user.token
-    }
-  },
-  methods: {
-    async getMyChannels () {
-      try {
-        const { data } = await getMyChannels()
-        this.myChannels = data.data.channels
-        if (!this.isLogin) {
-          //未登录状态
-          const myChannels = getLocal()
-          if (myChannels) {
-            this.myChannels = myChannels
-          } else {
-            const { data } = await getMyChannels()
-            this.myChannels = data.data.channels
-          }
-        } else {
-          //登录状态
-          const { data } = await getMyChannels()
-          this.myChannels = data.data.channels
-          // console.log(11)
-        }
-      } catch (e) {
-        this.$toast.fail('请重新获取列表')
-      }
-    },
-    //展示弹出层
-    showPopup () {
-      this.$refs.popup.isShow = true
-    },
-    //删除我的频道
-    async delMychannel (id) {
-      //删除我的频道
-      this.myChannels = this.myChannels.filter((item) => item.id !== id)
-      if (!this.isLogin) {
-        //未登录状态
-        setMyLocal(this.myChannels)
-      } else {
-        //登录状态
-        try {
-          await delMyChannel(id)
-        } catch (error) {
-          this.$toast.fail('删除用户频道失败')
-        }
-      }
-      this.$toast.success('删除用户频道成功')
-    },
-    changeActive (active) {
-      this.active = active
-    },
-    //添加频道
-    async addMyChannel (channel) {
-      this.myChannels.push(channel)
-      if (!this.isLogin) {
-        //未登录状态
-        setMyLocal(this.myChannels)
-      } else {
-        //登录状态
-        try {
-          await addMyChannel(channel.id, this.myChannels.length)
-        } catch (error) {
-          return this.$toast.fail('添加用户频道失败')
-        }
-      }
-      this.$toast.success('添加用户频道成功')
-    }
+    EditChannel
   }
 }
 </script>
 
-<style scoped lang="less">
-// 头部导航
-.navbar {
+<style lang="less" scoped>
+.van-nav-bar {
   background-color: #3296fa;
-  color: #fff;
   .van-button {
-    width: 555px;
-    height: 64px;
+    width: 278px;
+    height: 32px;
     background-color: #5babfb;
+    border-radius: 16px;
+    border: unset;
+    // opacity: 0.2;
+    span {
+      font-size: 14px;
+      color: #ffffff;
+    }
+    .van-icon {
+      color: #ffffff;
+      font-size: 16px;
+      margin-right: 3px;
+    }
   }
   :deep(.van-nav-bar__title) {
     max-width: unset;
   }
-  .van-button__text {
-    color: #fff;
-  }
-  .van-icon-search {
-    color: #fff;
-  }
-  .van-button--default {
-    border: 0.02667rem solid #5babfb;
-  }
 }
-//tabs选项卡
-:deep(.van-tabs__wrap) {
-  padding-right: 66px;
+/deep/ .channel-tabs {
+  .van-tabs__wrap {
+    height: 82px;
+  }
+  .van-tab {
+    border-right: 1px solid black;
+    min-width: 200px;
+    font-size: 30px;
+    .van-tab__text {
+      font-size: 27px;
+      color: #777777;
+    }
+  }
+  /deep/ .van.tabs__nav {
+    padding-bottom: 0;
+  }
 
+  .van-tab--active .van-tab__text {
+    color: #333 !important;
+  }
+  .van-tabs__line {
+    width: 31px !important;
+    height: 6px;
+    background: rgba(50, 150, 250, 1);
+    border-radius: 3px;
+    bottom: 8px;
+  }
   .van-tabs__nav {
-    padding-left: 0;
-    padding-right: 0;
-
-    /* tab标签 */
-    .van-tab {
-      border: 1px solid #eee;
-      width: 200px;
-      height: 82px;
-    }
-
-    /* tab标签下划线 */
-    .van-tabs__line {
-      width: 31px;
-      height: 6px;
-      background-color: #3296fa;
-      bottom: 40px;
-    }
+    padding: 0;
   }
 }
 
-/* 字体图标 */
-.toutiao-gengduo {
-  position: absolute;
-  top: 90px;
+.hamburger-btn {
+  position: fixed;
   right: 0;
-  width: 66px;
-  height: 82px;
-  font-size: 40px;
-  z-index: 999;
-  line-height: 82px;
-  text-align: center;
-  opacity: 0.6;
-  border-bottom: 1px solid #eee;
-
-  &::after {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 33px;
+  height: 41px;
+  background-color: #fff;
+  opacity: 0.902;
+  i.toutiao {
+    font-size: 33px;
+  }
+  &:before {
     content: '';
     position: absolute;
     left: 0;
-    top: 50%;
-    transform: translateY(-50%);
-    height: 70%;
     width: 1px;
-    background-image: url('~@/assets/images/gradient-gray-line.png');
+    height: 100%;
+    background-image: url(~@/assets/gradient-gray-line.png);
+    background-size: contain;
   }
 }
-// 头部固定的样式
-.navbar {
-  position: sticky;
-  top: 0;
-  left: 0;
+.van-tabs__nav--line .van-tabs__nav--complete {
+  padding-right: 400px;
 }
-:deep(.van-tabs__wrap) {
-  position: sticky;
-  top: 92px;
-  left: 0;
-  z-index: 99;
+:deep(.van-tabs--line) {
+  .van-tabs__wrap {
+    position: fixed;
+    top: 40px;
+    z-index: 999;
+    left: 0;
+    right: 0;
+  }
 }
-.toutiao-gengduo {
-  position: fixed;
-  top: 92px;
+.home-template {
+  padding-top: 90px;
+  padding-bottom: 50px;
 }
-
-:deep(.van-tabs__content) {
-  max-height: calc(100vh - 92px - 82px - 100px);
-  overflow: auto;
+:deep(.van-tab) {
+  padding: 0 10px;
+}
+:deep(.van-tabs__wrap--scrollable) {
+  .van-tabs__nav {
+    padding-right: 30px;
+  }
+}
+.content {
+  padding: 100%;
 }
 </style>

@@ -7,23 +7,24 @@
     </van-cell>
     <div>
       <van-cell
-        v-for="(item, index) in historys"
+        v-for="(i, index) in historys"
         :key="index"
-        @click="addSearch(item)"
+        @click="addSearch(i)"
       >
         <template #title>
-          <span>{{ item }}</span>
+          <span>{{ i }}</span>
         </template>
-        <van-icon name="cross" v-show="show" @click="delHistory(item)" />
+        <van-icon name="cross" v-show="show" @click="delHistory(i)" />
       </van-cell>
     </div>
   </div>
 </template>
 
 <script>
+/* eslint-disable */
 // import { getHistory } from '@/utils'
 export default {
-  data () {
+  data() {
     return {
       show: false,
       historys: []
@@ -35,22 +36,22 @@ export default {
       required: true
     }
   },
-  created () {
+  created() {
     this.historys = this.$store.state.history
-    console.log(this.historys)
+    // console.log(this.historys)
   },
   methods: {
-    delHistory (ele) {
+    delHistory(ele) {
       const res = this.historys.indexOf(ele)
-      console.log(res)
+      // console.log(res)
       this.historys.splice(0, 1)
       this.$store.commit('delHistorys', this.historys)
     },
-    delAll () {
+    delAll() {
       this.historys = []
       this.$store.commit('delHistorys', this.historys)
     },
-    addSearch (ele) {
+    addSearch(ele) {
       this.$emit('addSearch', ele)
     }
   }

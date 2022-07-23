@@ -1,26 +1,28 @@
+// 频道接口
 import request from '@/utils/request'
-import storage from '@/utils/storage'
 
-export const getMyChannels = () => {
+// 获取我的频道列表
+export const getChannel = () => {
   return request({
     url: '/v1_0/user/channels'
   })
 }
-
-export const getAllChannels = () => {
+// 获取所有频道列表
+export const getChannelAll = () => {
   return request({
     url: '/v1_0/channels'
   })
 }
-
-export const delMyChannel = (target) => {
+// 删除用户频道
+export const delChannel = (id) => {
   return request({
-    url: `/v1_0/user/channels/${target}`,
+    url: `/v1_0/user/channels/${id}`,
     method: 'DELETE'
   })
 }
 
-export const addMyChannel = (id, seq) => {
+// 添加用户频道
+export const addChannel = (id, seq) => {
   return request({
     url: '/v1_0/user/channels',
     method: 'PATCH',
@@ -29,8 +31,3 @@ export const addMyChannel = (id, seq) => {
     }
   })
 }
-
-const TOKN_KEY = 'TOKN_KEY'
-export const getLocal = () => storage.get(TOKN_KEY)
-
-export const setMyLocal = (channels) => storage.set(TOKN_KEY, channels)

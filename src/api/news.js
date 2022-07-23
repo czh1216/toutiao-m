@@ -1,11 +1,12 @@
 import request from '@/utils/request'
 
-export const getArticleList = (channelId, timestamp) => {
+// 频道文章列表
+export const getChannel = (times, id) => {
   return request({
     url: '/v1_0/articles',
     params: {
-      channel_id: channelId,
-      timestamp
+      channel_id: id,
+      timestamp: times
     }
   })
 }

@@ -1,20 +1,23 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-
 Vue.use(VueRouter)
-//路由页面懒加载
+
 const routes = [
   {
-    path: '/login',
+    path: '/Login',
     component: () => import('@/views/Login')
   },
   {
     path: '/',
     component: () => import('@/views/Layout'),
-    redirect: '/ ',
+    redirect: '/my',
     children: [
       {
-        path: '/ ',
+        path: '/my',
+        component: () => import('@/views/My')
+      },
+      {
+        path: '/home',
         component: () => import('@/views/Home')
       },
       {
@@ -23,11 +26,7 @@ const routes = [
       },
       {
         path: '/qa',
-        component: () => import('@/views/QA')
-      },
-      {
-        path: '/my',
-        component: () => import('@/views/My')
+        component: () => import('@/views/Qa')
       }
     ]
   },
@@ -36,12 +35,8 @@ const routes = [
     component: () => import('@/views/Search')
   },
   {
-    path: '/editdata',
-    component: () => import('@/views/EditData')
-  },
-  {
-    path: '/article',
-    component: () => import('@/views/Article')
+    path: '/articledetails/:id',
+    component: () => import('@/views/ArticleDetails')
   }
 ]
 

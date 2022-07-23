@@ -9,7 +9,7 @@
         @search="onSearch"
         @cancel="onCancel"
         @focus="onFocus"
-        class="search"
+        class="search-title"
       />
     </form>
     <component
@@ -21,9 +21,9 @@
 </template>
 
 <script>
-import SearchSuggestion from './components/SearchSuggestion'
-import SearchHistory from './components/SearchHistory'
-import SearchResult from './components/SearchResult'
+import Searchsuggest from './components/Searchsuggest.vue'
+import Searchhistory from './components/Searchhistory.vue'
+import Searchresult from './components/Searchresult.vue'
 export default {
   data () {
     return {
@@ -34,10 +34,10 @@ export default {
   methods: {
     onSearch () {
       this.SearchComponentsName = true
-      this.$store.state.history.push(this.SearchValue)
-      // console.log(res)
-      if (this.$store.state.history !== -1 && this.SearchValue.trim() !== '') {
-        this.$store.state.history.splice(this.$store.state.history, 1)
+
+      const res = this.$store.state.history.indexOf(this.SearchValue)
+      if (res !== -1 && this.SearchValue.trim() !== '') {
+        this.$store.state.history.splice(res, 1)
         this.$store.commit('getHistorys', this.SearchValue)
       } else {
         this.$store.commit('getHistorys', this.SearchValue)
@@ -55,28 +55,22 @@ export default {
     }
   },
   components: {
-    SearchHistory,
-    SearchResult,
-    SearchSuggestion
+    Searchsuggest,
+    Searchhistory,
+    Searchresult
   },
   computed: {
     componentsName () {
       if (this.SearchValue.trim() === '') {
-        return 'SearchHistory'
+        return 'Searchhistory'
       }
       if (this.SearchComponentsName) {
-        return 'SearchResult'
+        return 'Searchresult'
       }
-      return 'SearchSuggestion'
+      return 'Searchsuggest'
     }
   }
 }
 </script>
 
-<style scoped lang="less">
-.search {
-  :deep(.van-search__action) {
-    color: #fff;
-  }
-}
-</style>
+<style></style>

@@ -1,14 +1,8 @@
+// 用户信息接口
+/* eslint-disable */
+// import store from '@/store'
 import request from '@/utils/request'
-import store from '@/store'
-export * from './channel'
-export * from './news'
-
-/**
- * 登录
- * @param {String} mobile // 手机号
- * @param {String} code // 验证码
- * @returns Promise
- */
+// 登录注册接口
 export const login = (mobile, code) => {
   return request({
     url: '/v1_0/authorizations',
@@ -17,33 +11,37 @@ export const login = (mobile, code) => {
   })
 }
 
-export const sendCode = (mobile) => {
+// 发送短信验证码接口
+export const find = (mobile) => {
   return request({
-    url: `/v1_0/sms/codes/${mobile}`
+    url: `/v1_0/sms/codes/${mobile}`,
+    method: 'GET'
   })
 }
 
-export const getUserInfo = () => {
+// 获取用户信息
+
+export const users = () => {
   return request({
     url: '/v1_0/user',
-    headers: {
-      Authorization: `Bearer ${store.state.user.token}`
+    method: 'GET'
+  })
+}
+// 关注请求
+export const attention = (target) => {
+  return request({
+    url: '/v1_0/user/followings',
+    method: 'POST',
+    data: {
+      target
     }
   })
 }
 
-// 获取用户个人资料
-export const UserProfile = () => {
+// 取消关注请求
+export const unfollow = (target) => {
   return request({
-    url: '/v1_0/user/profile'
-  })
-}
-
-// 编辑用户个人资料
-export const UserProfileEdit = data => {
-  return request({
-    url: '/v1_0/user/profile',
-    method: 'PATCH',
-    data
+    url: `/v1_0/user/followings/${target}`,
+    method: 'DELETE'
   })
 }

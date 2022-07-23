@@ -25,10 +25,11 @@
   </div>
 </template>
 <script>
-import { grtSearchFn } from '@/api/search'
+/* eslint-disable */
+import { getSearchResult } from '@/API/search'
 export default {
   name: 'Searchresult',
-  data () {
+  data() {
     return {
       SearchResultList: [],
       isLoading: false,
@@ -47,15 +48,9 @@ export default {
   },
   methods: {
     // 页面进入渲染请求
-    async grtSearchFn () {
-      const { data } = await grtSearchFn(
-        this.SearchValue,
-        this.page,
-        this.perPage
-      )
-      console.log(data)
+    async getSearchResults() {
       try {
-        const { data } = await grtSearchFn(
+        const { data } = await getSearchResult(
           this.SearchValue,
           this.page,
           this.perPage
@@ -70,7 +65,7 @@ export default {
       this.page++
       this.perPage += 10
       try {
-        const { data } = await grtSearchFn(
+        const { data } = await getSearchResult(
           this.SearchValue,
           this.page,
           this.perPage
@@ -89,12 +84,13 @@ export default {
       } finally {
         this.loading = false
         this.isLoading = false
+        // this.finished = true
       }
     },
-    onLoad () {}
+    onLoad() {}
   },
-  created () {
-    this.grtSearchFn()
+  created() {
+    this.getSearchResults()
   }
 }
 </script>

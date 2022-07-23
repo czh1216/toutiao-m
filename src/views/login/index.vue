@@ -1,137 +1,167 @@
 <template>
-  <div>
-    <!----------- 头部表单H ------------->
-    <van-nav-bar class="info" title="标题" left-arrow @click-left="background">
-      <template #left><van-icon name="cross" color="#fff" /></template>
+  <div class="login-form">
+    <!-- 标题栏 -->
+    <van-nav-bar title="登录" @click-left="onClickLeft">
+      <template #left>
+        <van-icon name="cross" />
+      </template>
     </van-nav-bar>
-    <!----------- 头部表单S ------------->
-
-    <!----------- 输入框H ------------->
-    <van-form class="fine" ref="form" @submit="login">
+    <van-form @submit="onSubmit" ref="from">
       <van-field
-        v-model="mobile"
+        v-model.number="user.mobile"
         name="mobile"
-        label
-        placeholder="请输入手机号"
-        :rules="mobileRules"
+        maxlength="11"
+        placeholder="请填写手机号"
+        :rules="phone"
       >
-        <template #label>
-          <span class="toutiao toutiao-shouji"></span>
-        </template>
-      </van-field>
+        <template slot="label"><i class="iconfont icon-shouji"> </i> </template
+      ></van-field>
       <van-field
-        v-model="code"
+        v-model="user.code"
         name="code"
-        label
-        placeholder="请输入验证码"
-        :rules="condeRules"
+        maxlength="6"
+        placeholder="请填写验证码"
+        :rules="code"
       >
-        <!-- 左边字体图标 -->
-        <template #label>
-          <span class="toutiao toutiao-yanzhengma"></span>
-        </template>
-
-        <template #right-icon>
-          <!-- 验证码倒计时 -->
-          <van-count-down
-            v-if="isShowCountDown"
-            :time="3 * 1000"
-            @finish="isShowCountDown = false"
-          ></van-count-down>
-          <!-- 验证码图标 -->
-          <van-button class="code-btn" size="mini" round @click="sendCode"
+        <template slot="label"
+          ><i class="iconfont icon-yanzhengma"> </i
+        ></template>
+        <!-- 发送验证码 -->
+        <template #button>
+          <van-button
+            size="small"
+            round
+            class="sendBtn"
+            color="#ededed"
+            type="primary"
+            @click.prevent="sendCode"
+            v-if="!countDown"
             >发送验证码</van-button
           >
+          <!-- 倒计时 -->
+          <van-count-down
+            :time="60 * 1000"
+            v-if="countDown"
+            format="ss s"
+            @finish="countDown = false"
+          />
         </template>
       </van-field>
-      <!-- 登录按钮 -->
       <div style="margin: 16px">
-        <van-button block type="info" native-type="submit">登录</van-button>
+        <van-button
+          block
+          type="info"
+          class="findbtn-page"
+          native-type="submit"
+          @click.prevent="onSubmit"
+          >登录</van-button
+        >
       </div>
     </van-form>
-    <!----------- 输入框S ------------->
   </div>
 </template>
 
 <script>
-import { login, sendCode } from '@/api/user'
-import { mobileRules, condeRules } from './ruless.js'
+import { phone, code } from './rules.js' // 表单验证规则
+import { login, find } from '@/API/user.js' // 登录验证接口，验证码接口
 export default {
   data () {
     return {
-      mobile: '',
-      code: '',
-      condeRules,
-      mobileRules,
-      isShowCountDown: false
+      user: {
+        mobile: '', // 手机号
+        code: '' // 验证码
+      },
+      phone, // 手机号验证规则
+      code, // 验证码验证规则
+      countDown: false // 是否倒计时
     }
   },
   methods: {
+    // 登录注册
+    async onSubmit () {
+      this.$toast.loading({ message: '登录中...', forbidClick: true })
+
+      try {
+        const res = await login(this.user.mobile, this.user.code)
+        this.$toast.success('登录成功')
+        this.$router.push('/my')
+        // 登录成功将返回的数据token存入到vuex中，通过commit方法调用store中的setUser方法改变store中的user值，来存储token
+        this.$store.commit('setUser', res.data.data)
+      } catch (err) {
+        if (err.response.status === 507) {
+          this.$toast.fail('服务异常，请稍后再试')
+        } else {
+          this.$toast.fail(err.response.data.message)
+        }
+      }
+    },
+    // 发送验证码
     async sendCode () {
       try {
-        await this.$refs.form.validate('mobile')
-        await sendCode(this.mobile)
-        this.isShowCountDown = true
-      } catch (e) {
-        // this.$toast.fail('手机号非法!')
-        if (!e.response) {
-          this.$toast.fail('手机号非法!')
+        await this.$refs.from.validate('mobile') // 验证手机号是否为空
+        this.countDown = true
+        const mobile = this.user.mobile
+        await find(mobile)
+        this.$toast.success('发送成功')
+      } catch (err) {
+        if (err.response.status === 507) {
+          this.$toast.fail('服务异常，请稍后再试')
         } else {
-          const status = e.response.status
-          if (status === 404 || status === 429) {
-            this.$toast.fail(e.response.data.message)
-          }
+          this.$toast.fail(err.response.data.message || '手机号不正确')
         }
       }
     },
-    async login () {
-      this.$toast.loading({
-        message: '不要急,正在加载中...',
-        forbidClick: true
-      })
-      try {
-        const res = await login(this.mobile, this.code)
-        console.log('登录成功', res)
-        // 存储token
-        this.$store.commit('setUser', res.data.data)
-        this.$router.push('/my')
-        this.$toast.success('登录成功')
-      } catch (e) {
-        const status = e.response.status
-        let message = '登录错误，请刷新！'
-        if (status === 400) {
-          message = e.response.data.message
-        }
-        this.$toast.fail(message)
-      }
-    },
-    // 返回之前的页面
-    background () {
+    onClickLeft () {
       this.$router.back()
     }
   }
 }
 </script>
 
-<style scoped lang="less">
-.info {
-  background-color: #3296fa;
-  // color#fff
-  :deep(.van-nav-bar__title) {
-    color: #fff;
+<style lang="less" scoped>
+.login-form {
+  .van-nav-bar {
+    background-color: #3296fa;
+    height: 50px;
+    :deep(.van-nav-bar__content) {
+      height: 100%;
+    }
+    :deep(.van-nav-bar__title) {
+      color: #ffffff;
+      font-size: 16px;
+    }
   }
-}
-.fine {
+  .van-nav-bar .van-icon {
+    color: #ffffff;
+    font-size: 20px;
+  }
   :deep(.van-field__label) {
     width: 20px;
+    color: #666666;
   }
-  .toutiao {
-    font-size: 35px;
+  :deep(.van-cell__title) {
+    .iconfont {
+      color: #666666;
+      font-size: 19px;
+    }
   }
-  .code-btn {
-    background-color: #eee;
-    padding: 0 10px;
-    color: #666;
+  /deep/.sendBtn {
+    width: 76px;
+    height: 23px;
+    white-space: nowrap;
+    .van-button__content {
+      color: #666666;
+      font-size: 11px;
+    }
+  }
+  /deep/.van-field__button {
+    border-left: 1px solid #eeeeee;
+  }
+  .findbtn-page {
+    margin-top: 28px;
+  }
+  .van-button--info {
+    background-color: #6db4fb;
   }
 }
 </style>

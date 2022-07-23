@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import { getSearch } from '@/api/search'
+import { getSearchSuggest } from '@/API/search'
 export default {
   data () {
     return {
@@ -30,17 +30,17 @@ export default {
     }
   },
   methods: {
-    async getSearch () {
+    async getSearchSuggest () {
       if (this.SearchValue.trim() !== '') {
         try {
-          const res = await getSearch(this.SearchValue)
+          const res = await getSearchSuggest(this.SearchValue)
           this.list = res.data.data.options.filter(Boolean)
           this.show = true
           if (this.list.length === 0) {
             this.show = false
           }
         } catch (err) {
-          console.log(err)
+          // console.log(err)
         }
       }
     },
@@ -53,7 +53,7 @@ export default {
     SearchValue: {
       immediate: true,
       handler () {
-        this.getSearch()
+        this.getSearchSuggest()
       }
     }
   },

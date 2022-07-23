@@ -5,13 +5,8 @@
 </template>
 
 <script>
-import request from '@/utils/request'
 export default {
-  created () {
-    console.dir(request)
-  }
 }
 </script>
 
-<style scoped>
-</style>
+<style lang="less" scoped></style>
