@@ -5,7 +5,7 @@
       <template #title>
         <van-button @click="$router.push('/search')">
           <van-icon name="search" />
-          <span>搜索 </span>
+          <span>搜索</span>
         </van-button>
       </template>
     </van-nav-bar>
@@ -50,7 +50,7 @@ export default {
   },
   computed: {
     user () {
-      // 两个感叹号转换为布尔值
+      // 转换为布尔值
       return !!this.$store.state.user.token
     }
   },
@@ -122,13 +122,13 @@ export default {
 <style lang="less" scoped>
 .van-nav-bar {
   background-color: #3296fa;
+  // height: 80px;
   .van-button {
     width: 278px;
     height: 32px;
     background-color: #5babfb;
     border-radius: 16px;
     border: unset;
-    // opacity: 0.2;
     span {
       font-size: 14px;
       color: #ffffff;
@@ -138,6 +138,9 @@ export default {
       font-size: 16px;
       margin-right: 3px;
     }
+  }
+  :deep(.van-nav-bar__content) {
+    height: 40px;
   }
   :deep(.van-nav-bar__title) {
     max-width: unset;

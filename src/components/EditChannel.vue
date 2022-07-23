@@ -34,15 +34,16 @@
           </van-grid>
         </div>
         <div class="recommendedChannel">
-          <van-cell title="推荐频道"> </van-cell>
-          <van-grid :gutter="10">
+          <van-cell title="推荐频道"></van-cell>
+          <van-grid :gutter="10" :border="false">
             <van-grid-item
               :text="ele.name"
               v-for="ele in allChannels"
               :key="ele.id"
               @click="addChannel(ele)"
-              ><template #icon><van-icon name="plus" /></template
-            ></van-grid-item>
+              icon="plus"
+              >
+            </van-grid-item>
           </van-grid>
         </div>
       </div>
@@ -136,24 +137,6 @@ export default {
     }
   }
 }
-// 推荐频道的样式
-.recommendedChannel {
-  // 推荐频道加号样式
-  :deep(.van-grid-item__content) {
-    // flex-direction: row;
-
-    .van-grid-item__icon {
-      font-size: 0.5rem;
-    }
-
-    .van-grid-item__text {
-      margin-top: 0px;
-    }
-    .van-icon {
-      top: -15px;
-    }
-  }
-}
 :deep(.van-grid-item__content) {
   background-color: #e5e5e5;
 }
@@ -162,5 +145,21 @@ export default {
 }
 :deep(.van-grid-item__text) {
   color: unset;
+}
+  // 推荐频道的样式
+.recommendedChannel {
+  // 推荐频道加号样式
+  :deep(.van-grid-item__content) {
+    flex-direction: row;
+      background-color: #eee;
+
+    .van-grid-item__icon {
+      font-size: 0.5rem;
+    }
+
+    .van-grid-item__text {
+      margin-top: 0;
+    }
+  }
 }
 </style>

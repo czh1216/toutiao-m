@@ -10,19 +10,13 @@
             <img :src="list.photo" alt="" />
             <p>{{ list.name }}</p>
           </div>
-          <van-button class="data-btn">编辑资料</van-button>
+          <van-button class="data-btn" @click="$router.push('/editdata')">编辑资料</van-button>
         </div>
         <van-grid :border="false">
           <van-grid-item class="data-msg">
             <template>
-              <span>{{ list.like_count }}</span>
-              <p>头条</p>
-            </template>
-          </van-grid-item>
-          <van-grid-item class="data-msg">
-            <template>
               <span>{{ list.art_count }}</span>
-              <p>关注</p>
+              <p>头条</p>
             </template>
           </van-grid-item>
           <van-grid-item class="data-msg">
@@ -34,6 +28,12 @@
           <van-grid-item class="data-msg">
             <template>
               <span>{{ list.follow_count }}</span>
+              <p>关注</p>
+            </template>
+          </van-grid-item>
+          <van-grid-item class="data-msg">
+            <template>
+              <span>{{ list.like_count }}</span>
               <p>获赞</p>
             </template>
           </van-grid-item>

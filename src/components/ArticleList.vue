@@ -39,8 +39,6 @@ export default {
       times: '',
       error: false,
       refreshing: false
-
-      // pre_timestamp=this.times ||+new Date()s
     }
   },
   props: {
@@ -75,9 +73,7 @@ export default {
         } else {
           this.articles.push(...data.data.results)
         }
-
         this.preTimestamp = data.data.pre_timestamp
-        // }
         if (!this.preTimestamp) {
           this.finished = true
         }

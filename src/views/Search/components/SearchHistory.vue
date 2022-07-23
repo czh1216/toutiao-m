@@ -60,7 +60,6 @@ export default {
 .van-button {
   border: unset;
   height: 10px;
-  /* margin-right: 0px; */
   color: #969799;
 }
 .van-icon {

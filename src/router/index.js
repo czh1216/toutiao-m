@@ -35,6 +35,10 @@ const routes = [
     component: () => import('@/views/Search')
   },
   {
+    path: '/editdata',
+    component: () => import('@/views/EditData')
+  },
+  {
     path: '/articledetails/:id',
     component: () => import('@/views/ArticleDetails')
   }

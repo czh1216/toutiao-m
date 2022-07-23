@@ -25,11 +25,10 @@
   </div>
 </template>
 <script>
-/* eslint-disable */
 import { getSearchResult } from '@/API/search'
 export default {
   name: 'Searchresult',
-  data() {
+  data () {
     return {
       SearchResultList: [],
       isLoading: false,
@@ -48,7 +47,7 @@ export default {
   },
   methods: {
     // 页面进入渲染请求
-    async getSearchResults() {
+    async getSearchResults () {
       try {
         const { data } = await getSearchResult(
           this.SearchValue,
@@ -84,12 +83,11 @@ export default {
       } finally {
         this.loading = false
         this.isLoading = false
-        // this.finished = true
       }
     },
-    onLoad() {}
+    onLoad () {}
   },
-  created() {
+  created () {
     this.getSearchResults()
   }
 }
