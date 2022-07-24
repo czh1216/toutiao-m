@@ -224,15 +224,19 @@ export default {
   }
 }
 .popup-button {
-  background-color: #466b9d;
+  background-color: #FF69B4;
   position: fixed;
   right: 0;
+  // margin: 10px 0;
   left: 0;
   bottom: 0;
+  height: 60px;
   text-align: center;
   :deep(.van-button) {
     width: 300px;
-    padding: 10px;
+    padding: 20px;
+    height: 40px;
+    bottom: -8px;
     border-radius: 20px;
     span {
       color: #333;
