@@ -1,8 +1,10 @@
-// 用户信息接口
-/* eslint-disable */
-// import store from '@/store'
 import request from '@/utils/request'
-// 登录注册接口
+/**
+ * 登录注册接口
+ * @param {*} mobile // 手机号
+ * @param {*} code  // 验证码
+ * @returns  // returns
+ */
 export const login = (mobile, code) => {
   return request({
     url: '/v1_0/authorizations',
@@ -11,7 +13,11 @@ export const login = (mobile, code) => {
   })
 }
 
-// 发送短信验证码接口
+/**
+ * // 发送短信验证码接口
+ * @param {*} mobile // 手机号
+ * @returns //returns
+ */
 export const find = (mobile) => {
   return request({
     url: `/v1_0/sms/codes/${mobile}`,
@@ -19,15 +25,22 @@ export const find = (mobile) => {
   })
 }
 
-// 获取用户信息
-
+/**
+ * // 获取用户信息
+ * @returns //returns
+ */
 export const users = () => {
   return request({
     url: '/v1_0/user',
     method: 'GET'
   })
 }
-// 关注请求
+
+/**
+ * // 关注请求
+ * @param {*} target //关注用户的id
+ * @returns //returns
+ */
 export const attention = (target) => {
   return request({
     url: '/v1_0/user/followings',
@@ -38,7 +51,11 @@ export const attention = (target) => {
   })
 }
 
-// 取消关注请求
+/**
+ * // 取消关注请求
+ * @param {*} target //目标用户
+ * @returns //returns
+ */
 export const unfollow = (target) => {
   return request({
     url: `/v1_0/user/followings/${target}`,
@@ -46,7 +63,11 @@ export const unfollow = (target) => {
   })
 }
 
-// 编辑用户个人资料
+/**
+ * // 编辑用户个人资料
+ * @param {*} data //个人资料
+ * @returns //returns
+ */
 export const UserProfileEdit = data => {
   return request({
     url: '/v1_0/user/profile',

@@ -225,12 +225,12 @@ main {
         margin-bottom: 10px;
       }
       .mobile-img {
-        width: 132px;
-        height: 132px;
-        margin-bottom: 15px;
+        width: 66px;
+        height: 66px;
+        margin-bottom: 7px;
       }
       .text {
-        font-size: 28px;
+        font-size: 14px;
         color: #fff;
       }
     }

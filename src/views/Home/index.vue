@@ -1,6 +1,6 @@
 <template>
   <div>
-    <!-- 顶部标题 -->
+    <!---------------- 搜索框 S------------------->
     <van-nav-bar class="navbar">
       <template #title>
         <van-button @click="$router.push('/search')" round>
@@ -8,15 +8,18 @@
         </van-button>
       </template>
     </van-nav-bar>
+    <!---------------- 搜索框 E------------------->
 
-    <!-- 顶部导航 -->
+    <!---------------- 推荐导航 S------------------->
     <van-tabs v-model="active" swipeable>
       <van-tab :title="ele.name" :name="index" v-for="(ele, index) in channelList" :key="index">
         <ArticleList :id="ele.id"></ArticleList>
       </van-tab>
     </van-tabs>
     <span class="iconfont icon-hanbaocaidan" slot="nav-right" @click="isShow"></span>
+    <!---------------- 推荐导航 E------------------->
 
+    <!------------------ 内容 S---------------------->
     <EditChannel
       ref="popup"
       :list="channelList"
@@ -25,6 +28,7 @@
       @cutChannel="cutChannel"
       @addChannel="addChannel"
     ></EditChannel>
+    <!------------------ 内容 E---------------------->
   </div>
 </template>
 
@@ -33,7 +37,6 @@ import EditChannel from '@/components/EditChannel'
 import ArticleList from '@/components/ArticleList.vue'
 import { getChannel, delChannel, addChannel } from '@/API/channel'
 import { GetChannel, SetChannel } from '@/utils/auth'
-
 export default {
   data () {
     return {
@@ -184,7 +187,6 @@ export default {
     transform: translateY(-50%);
     height: 70%;
     width: 1px;
-    // background-image: url('~@/assets/images/gradient-gray-line.png');
     background-image: url('~@/assets/gradient-gray-line.png')
   }
 }
@@ -206,7 +208,7 @@ export default {
 }
 
 :deep(.van-tabs__content) {
-  max-height: calc(150vh - 92px - 82px - 100px);
+  max-height: calc(100vh - 46px - 41px - 50px);
   overflow: auto;
 }
 </style>
