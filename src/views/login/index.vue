@@ -161,7 +161,7 @@ export default {
     margin-top: 28px;
   }
   .van-button--info {
-    background-color: #6db4fb;
+    background-color: #6DB4FB;
   }
 }
 </style>

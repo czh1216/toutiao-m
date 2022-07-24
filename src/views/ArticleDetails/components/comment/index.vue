@@ -174,7 +174,7 @@ export default {
     async articleReviews () {
       const res = await articleReviews('c', this.ele.com_id)
       this.list = res.data.data.results
-      //   console.log(this.list)
+      // console.log(this.list)
     },
     // 发布评论回复
     async sendMessage () {
@@ -190,7 +190,8 @@ export default {
       await CommentsThumb(id)
       this.articleReviews()
       this.$emit('CommentsThumb')
-      //   console.log(res)
+      // const res = await CommentsThumb(id)
+      // console.log(res)
     },
     // 取消点赞评论
     async noCommentsThumb (id) {

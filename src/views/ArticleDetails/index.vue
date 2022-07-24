@@ -1,6 +1,7 @@
 <template>
   <div>
-    <van-nav-bar title="黑马头条" left-arrow @click-left="onClickLeft" />
+    <!-- <van-nav-bar title="黑马头条" left-arrow @click-left="onClickLeft" /> -->
+    <navBar :title="'黑马头条'" @click-left="onClickLeft"></navBar>
     <!-- 标题 -->
     <div class="title">
       <van-cell :title="journalismDetails.title" />
@@ -77,16 +78,35 @@
         v-if="journalismDetails.is_collected"
         @click="delCollectionArticles"
       />
-      <!-- 收藏 -->
 
-      <van-icon color="#777" name="good-job-o" />
-      <!-- <van-icon name="thumb-circle" color="#3296fa" /> -->
+      <!-- 文章点赞 -->
+      <van-icon
+        color="#777"
+        name="good-job-o"
+        @click="TheArticleThumb(journalismDetails.art_id)"
+        v-if="journalismDetails.attitude"
+      />
+      <van-icon
+        color="#3296fa"
+        name="good-job"
+        @click="noTheArticleThumb(journalismDetails.art_id)"
+        v-if="!journalismDetails.attitude"
+      />
+
+      <!-- 分享 -->
       <van-icon
         name="share"
         color="#777777"
         @click="showShare = true"
       ></van-icon>
+      <!-- 分享面板 -->
+      <van-share-sheet
+        v-model="showShare"
+        title="立即分享给好友"
+        :options="options"
+      />
     </div>
+
     <!-- 评论弹出层 -->
     <van-popup v-model="show" position="bottom" :style="{ height: '20%' }">
       <div class="popup">
@@ -106,12 +126,7 @@
         >
       </div>
     </van-popup>
-    <!-- 分享面板 -->
-    <van-share-sheet
-      v-model="showShare"
-      title="立即分享给好友"
-      :options="options"
-    />
+
     <!-- 正文结束 -->
     <div class="sedSegmentation"><van-divider>正文结束</van-divider></div>
     <!-- 评论 -->
@@ -140,12 +155,15 @@
 <script>
 import comment from './components/comment'
 import dayjs from '@/utils/dayjs.js'
+import navBar from '@/components/navBar.vue'
 import {
   getJournalism,
   setComment,
   CollectionArticles,
   delCollectionArticles,
-  articleReviews
+  articleReviews,
+  TheArticleThumb,
+  noTheArticleThumb
 } from '@/API/journalism'
 import { attention, unfollow } from '@/API/user'
 export default {
@@ -162,21 +180,34 @@ export default {
       loading: false,
       commentList: [],
       options: [
-        { name: '微信', icon: 'wechat' },
-        { name: '微博', icon: 'weibo' },
-        { name: '复制链接', icon: 'link' },
-        { name: '分享海报', icon: 'poster' },
-        { name: '二维码', icon: 'qrcode' }
+        [
+          { name: '微信', icon: 'wechat' },
+          { name: '朋友圈', icon: 'wechat-moments' },
+          { name: '微博', icon: 'weibo' },
+          { name: 'QQ', icon: 'qq' }
+        ],
+        [
+          { name: '复制链接', icon: 'link' },
+          { name: '分享海报', icon: 'poster' },
+          { name: '二维码', icon: 'qrcode' },
+          { name: '小程序码', icon: 'weapp-qrcode' }
+        ]
       ]
     }
   },
   components: {
-    comment
+    comment,
+    navBar
   },
   created () {
     this.id = this.$router.currentRoute.params.id
     this.getJournalism()
   },
+  // computed: {
+  //   isStro () {
+  //     return !!this.journalismDetails.attitude
+  //   }
+  // },
   methods: {
     // 左侧按钮点击事件
     onClickLeft () {
@@ -189,6 +220,24 @@ export default {
       //   console.log(this.journalismDetails)
       this.articleReviews()
     },
+
+    //文章点赞
+    async TheArticleThumb (id) {
+      await TheArticleThumb(id)
+      this.getJournalism()
+      this.$emit('TheArticleThumb')
+      // const res = await TheArticleThumb(id)
+      // console.log(res)
+    },
+    //取消文章点赞
+    async noTheArticleThumb (id) {
+      await noTheArticleThumb(id)
+      this.getJournalism()
+      this.$emit('noTheArticleThumb')
+      // const res = await noTheArticleThumb(id)
+      // console.log(res)
+    },
+
     // 关注按钮点击事件
     async attentionBtn () {
       this.onloading = true
@@ -203,6 +252,7 @@ export default {
       this.getJournalism()
       this.onloading = false
     },
+
     // 发布评论
     async sendMessage () {
       await setComment(this.journalismDetails.art_id, this.message)
@@ -211,6 +261,7 @@ export default {
       this.message = ''
       this.$toast('发布成功')
     },
+
     // 取消收藏文章
     async delCollectionArticles () {
       await delCollectionArticles(this.journalismDetails.art_id)
@@ -223,6 +274,7 @@ export default {
       this.getJournalism()
       this.$toast('收藏成功')
     },
+
     // 文章评论
     async articleReviews () {
       this.loading = true
@@ -287,6 +339,7 @@ p {
 .aut-data {
   display: flex;
   align-items: center;
+  background-color: #fff;
   justify-content: space-between;
   padding: 0.53333rem 20px;
   .aut-data-name {

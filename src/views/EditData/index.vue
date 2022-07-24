@@ -6,18 +6,22 @@
     </div>
 
     <!-- 头像-->
-    <input type="file" hidden ref="file" @change="onFileChange">
-    <van-cell title="头像" is-link @click="$refs.file.click()">
-      <van-image class="avatar" fit="cover" round :src="user.photo" />
+    <input type="file" hidden ref="file" />
+    <van-cell
+      title="头像"
+      is-link
+      @click="$refs.file.click()"
+      class="head-portrait"
+    >
+      <van-image class="avatar" fit="cover" round :src="!!imgUrl ? imgUrl : user.photo" />
     </van-cell>
     <!-- 头像弹出层 -->
-    <van-popup
-    v-model="isUpdatePhotoShow"
-    style="height: 100%"
-    position="bottom"
-    >
-    <headPortrait @close="isUpdatePhotoShow = true" />
-    </van-popup>
+    <headPortrait
+      :photo="photo"
+      v-if="isUpdatePhotoShow"
+      @confirm="confirm"
+      @noConfirm="noConfirm"
+    />
 
     <!-- 内容 -->
     <van-cell
@@ -52,14 +56,13 @@
     </van-popup>
 
     <van-cell
-    title="生日"
-    @click="isShowUpdateBirthdy = true"
-    :value="user.birthday || '1977-00-00'"
-    is-link />
+      title="生日"
+      @click="isShowUpdateBirthdy = true"
+      :value="user.birthday || '1977-00-00'"
+      is-link
+    />
     <!-- 生日弹层 -->
-    <van-popup
-    v-model="isShowUpdateBirthdy"
-    position="bottom">
+    <van-popup v-model="isShowUpdateBirthdy" position="bottom">
       <date v-model="user.birthday" @close="isShowUpdateBirthdy = false" />
     </van-popup>
   </div>
@@ -77,9 +80,11 @@ export default {
     return {
       user: [],
       isUpdatePhotoShow: false,
+      photo: '',
       ShowUpdateName: false,
       isShowUpdateGender: false,
-      isShowUpdateBirthdy: false
+      isShowUpdateBirthdy: false,
+      imgUrl: ''
     }
   },
   components: {
@@ -104,21 +109,27 @@ export default {
         this.$toast('获取数据失败')
       }
     },
-    //获取图片路径
-    onFileChange () {
-      const file = this.$refs.file.files[0]
-      const imgFn = window.URL.createObjectURL(file)
-      console.log(imgFn)
+    //更新头像
+    confirm (img) {
+      this.isUpdatePhotoShow = false
+      this.imgUrl = img
     },
-    //上传图片
-    inputChange () {
-      const file = this.$refs.file.files[0]
-      const imagUrl = window.URL.createObjectURL(file)
-      this.isUpdatePhotoShow = true
-      console.log(imagUrl)
-      console.log(22)
-      // this.$refs.file.value = ''
+    noConfirm () {
+      this.isUpdatePhotoShow = false
     }
+  },
+
+  mounted () {
+    this.$refs.file.addEventListener('change', (e) => {
+      const file = e.target.files[0]
+      const fr = new FileReader()
+      fr.readAsDataURL(file)
+      fr.onload = (e) => {
+        this.photo = e.target.result
+        this.isUpdatePhotoShow = true
+        this.$refs.file.value = ''
+      }
+    })
   }
 }
 </script>
@@ -127,5 +138,10 @@ export default {
 .avatar {
   width: 30px;
   height: 30px;
+}
+.head-portrait {
+  // top: -130px;
+  // z-index: 999;
+  margin-top: 50px;
 }
 </style>

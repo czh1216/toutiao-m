@@ -78,3 +78,22 @@ export const noCommentsThumb = (target) => {
     url: `/v1_0/comment/likings/${target}`
   })
 }
+
+// 对文章点赞
+export const TheArticleThumb = (target) => {
+  return request({
+    method: 'POST',
+    url: '/v1_0/article/dislikes',
+    data: {
+      target
+    }
+  })
+}
+
+// 取消对文章点赞
+export const noTheArticleThumb = (target) => {
+  return request({
+    method: 'DELETE',
+    url: `/v1_0/article/dislikes/${target}`
+  })
+}

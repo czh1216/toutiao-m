@@ -3,6 +3,7 @@
     <van-nav-bar
       :title="title"
       left-arrow
+      fixed
       @click-left="onClickLeft"
       class="nav-bar"
     />

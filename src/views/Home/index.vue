@@ -1,28 +1,22 @@
 <template>
-  <div class="home-template">
+  <div>
     <!-- 顶部标题 -->
-    <van-nav-bar fixed>
+    <van-nav-bar class="navbar">
       <template #title>
-        <van-button @click="$router.push('/search')">
-          <van-icon name="search" />
-          <span>搜索</span>
+        <van-button @click="$router.push('/search')" round>
+          <van-icon name="search" />搜索
         </van-button>
       </template>
     </van-nav-bar>
+
     <!-- 顶部导航 -->
-    <van-tabs v-model="active" swipeable animated>
-      <van-tab
-        :title="ele.name"
-        :name="index"
-        v-for="(ele, index) in channelList"
-        :key="index"
-      >
+    <van-tabs v-model="active" swipeable>
+      <van-tab :title="ele.name" :name="index" v-for="(ele, index) in channelList" :key="index">
         <ArticleList :id="ele.id"></ArticleList>
       </van-tab>
-      <div slot="nav-right" class="hamburger-btn" @click="isShow">
-        <i class="iconfont icon-hanbaocaidan"></i>
-      </div>
     </van-tabs>
+    <span class="iconfont icon-hanbaocaidan" slot="nav-right" @click="isShow"></span>
+
     <EditChannel
       ref="popup"
       :list="channelList"
@@ -120,112 +114,99 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.van-nav-bar {
+// 头部导航
+.navbar {
   background-color: #3296fa;
-  // height: 80px;
+  color: #fff;
   .van-button {
-    width: 278px;
+    width: 277px;
     height: 32px;
     background-color: #5babfb;
-    border-radius: 16px;
-    border: unset;
-    span {
-      font-size: 14px;
-      color: #ffffff;
-    }
-    .van-icon {
-      color: #ffffff;
-      font-size: 16px;
-      margin-right: 3px;
-    }
-  }
-  :deep(.van-nav-bar__content) {
-    height: 40px;
   }
   :deep(.van-nav-bar__title) {
     max-width: unset;
   }
-}
-/deep/ .channel-tabs {
-  .van-tabs__wrap {
-    height: 82px;
+  .van-button__text {
+    color: #fff;
   }
-  .van-tab {
-    border-right: 1px solid black;
-    min-width: 200px;
-    font-size: 30px;
-    .van-tab__text {
-      font-size: 27px;
-      color: #777777;
+  .van-icon-search {
+    color: #fff;
+  }
+  .van-button--default {
+    border: 0.02667rem solid #5babfb;
+  }
+}
+//tabs选项卡
+:deep(.van-tabs__wrap) {
+  padding-right: 33px;
+
+  .van-tabs__nav {
+    padding-left: 0;
+    padding-right: 0;
+
+    /* tab标签 */
+    .van-tab {
+      border: 1px solid #eee;
+      width: 100px;
+      height: 41px;
+    }
+
+    /* tab标签下划线 */
+    .van-tabs__line {
+      width: 15px;
+      height: 3px;
+      background-color: #3296fa;
+      bottom: 20px;
     }
   }
-  /deep/ .van.tabs__nav {
-    padding-bottom: 0;
-  }
-
-  .van-tab--active .van-tab__text {
-    color: #333 !important;
-  }
-  .van-tabs__line {
-    width: 31px !important;
-    height: 6px;
-    background: rgba(50, 150, 250, 1);
-    border-radius: 3px;
-    bottom: 8px;
-  }
-  .van-tabs__nav {
-    padding: 0;
-  }
 }
 
-.hamburger-btn {
-  position: fixed;
+/* 字体图标 */
+.icon-hanbaocaidan {
+  position: absolute;
+  top: 46px;
   right: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
   width: 33px;
   height: 41px;
+  font-size: 20px;
+  z-index: 999;
+  line-height: 41px;
+  text-align: center;
+  opacity: 0.6;
+  border-bottom: 1px solid #fff;
   background-color: #fff;
-  opacity: 0.902;
-  i.toutiao {
-    font-size: 33px;
-  }
-  &:before {
+
+  &::after {
     content: '';
     position: absolute;
     left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    height: 70%;
     width: 1px;
-    height: 100%;
-    background-image: url(~@/assets/gradient-gray-line.png);
-    background-size: contain;
+    // background-image: url('~@/assets/images/gradient-gray-line.png');
+    background-image: url('~@/assets/gradient-gray-line.png')
   }
 }
-.van-tabs__nav--line .van-tabs__nav--complete {
-  padding-right: 400px;
+// 头部固定的样式
+.navbar {
+  position: sticky;
+  top: 0;
+  left: 0;
 }
-:deep(.van-tabs--line) {
-  .van-tabs__wrap {
-    position: fixed;
-    top: 40px;
-    z-index: 999;
-    left: 0;
-    right: 0;
-  }
+:deep(.van-tabs__wrap) {
+  position: sticky;
+  top: 46px;
+  left: 0;
+  z-index: 99;
 }
-.home-template {
-  padding-top: 90px;
-  padding-bottom: 50px;
+.toutiao-gengduo {
+  position: fixed;
+  top: 46px;
 }
-:deep(.van-tab) {
-  padding: 0 10px;
-}
-:deep(.van-tabs__wrap--scrollable) {
-  .van-tabs__nav {
-    padding-right: 30px;
-  }
-}
-.content {
-  padding: 100%;
+
+:deep(.van-tabs__content) {
+  max-height: calc(150vh - 92px - 82px - 100px);
+  overflow: auto;
 }
 </style>

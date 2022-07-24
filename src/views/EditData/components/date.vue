@@ -16,7 +16,7 @@
 
 <script>
 import { UserProfileEdit } from '@/API/user'
-import dayjs from '@/utils/datjs.js'
+import dayjs from '@/utils/dayjs'
 export default {
   data () {
     return {
@@ -40,9 +40,9 @@ export default {
       })
       try {
         await UserProfileEdit({
-          birthday: dayjs(this.currentDate).fromNow('YYYY-MM-DD')
+          birthday: dayjs(this.currentDate).format('YYYY-MM-DD')
         })
-        this.$emit('input', dayjs(this.currentDate).fromNow('YYYY-MM-DD'))
+        this.$emit('input', dayjs(this.currentDate).format('YYYY-MM-DD'))
         this.$emit('close')
         this.$toast.success('更新成功')
       } catch (e) {

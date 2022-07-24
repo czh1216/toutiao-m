@@ -3,69 +3,79 @@
     <!-- 头部 -->
     <header>
       <!-- 已登录 -->
-      <div class="my-login banner {" v-if="isShow">
+      <div class="user-info banner" v-if="isShow">
+        <!-- 占位 -->
+        <van-row></van-row>
         <!-- 用户信息 -->
-        <div class="my-data">
-          <div class="data-my-login">
-            <img :src="list.photo" alt="" />
-            <p>{{ list.name }}</p>
-          </div>
-          <van-button class="data-btn" @click="$router.push('/editdata')">编辑资料</van-button>
-        </div>
-        <van-grid :border="false">
-          <van-grid-item class="data-msg">
-            <template>
-              <span>{{ list.art_count }}</span>
-              <p>头条</p>
-            </template>
+        <van-row class="row-2">
+          <van-col span="12">
+            <van-row type="flex" align="center" justify="space-around">
+              <van-image
+                round
+                width="1.76rem"
+                height="1.76rem"
+                :src="list.photo"
+              />
+              <span class="mobile">{{ list.name }}</span>
+            </van-row>
+          </van-col>
+          <van-col span="11">
+            <van-row class="code-row" type="flex" align="center" justify="end">
+              <van-button class="code-btn" size="mini" round @click="$router.push('/editdata')">编辑资料</van-button>
+            </van-row>
+          </van-col>
+        </van-row>
+
+        <van-grid :border="false" class="grid">
+          <van-grid-item text="头条">
+            <template #icon>{{ list.art_count }}</template>
           </van-grid-item>
-          <van-grid-item class="data-msg">
-            <template>
-              <span>{{ list.fans_count }}</span>
-              <p>粉丝</p>
-            </template>
-          </van-grid-item>
-          <van-grid-item class="data-msg">
-            <template>
-              <span>{{ list.follow_count }}</span>
-              <p>关注</p>
-            </template>
-          </van-grid-item>
-          <van-grid-item class="data-msg">
-            <template>
-              <span>{{ list.like_count }}</span>
-              <p>获赞</p>
-            </template>
-          </van-grid-item>
+          <van-grid-item text="粉丝">
+              <template #icon>{{ list.fans_count }}</template>
+            </van-grid-item>
+            <van-grid-item text="关注">
+              <template #icon>{{ list.follow_count }}</template>
+            </van-grid-item>
+            <van-grid-item text="获赞">
+              <template #icon>{{ list.like_count }}</template>
+            </van-grid-item>
         </van-grid>
       </div>
+
       <!-- 未登录 -->
-      <div class="no-login banner {" v-else>
-        <div class="no-login-data">
-          <img src="@/assets/mobile.png" alt="" />
-          <span @click="loginBtn">登录 / 注册</span>
+      <div class="login-register banner" v-else>
+        <div class="wrap" @click="loginBtn">
+          <img src="@/assets/mobile.png" alt="" class="mobile-img" />
+          <span class="text">登录 / 注册</span>
         </div>
       </div>
     </header>
+
     <!-- 内容 -->
     <main>
-      <van-grid :column-num="2" class="my-collect" :clickable="true">
+      <div>
+        <!-- iconfont -->
+        <van-grid :column-num="2" class="grid" :clickable="true">
         <van-grid-item text="收藏">
-          <i slot="icon"><van-icon color="#eb5253" name="star-o" /> </i>
+          <template #icon>
+            <span class="iconfont icon-shoucang"></span>
+          </template>
         </van-grid-item>
         <van-grid-item text="历史记录">
-          <i slot="icon"><van-icon name="clock-o" color="#ff9d1d" /> </i>
+          <template #icon>
+            <span class="iconfont icon-lishi"></span>
+          </template>
         </van-grid-item>
-      </van-grid>
-      <van-cell-group>
+        </van-grid>
+      </div>
+
+      <div class="link">
         <van-cell title="消息通知" is-link />
         <van-cell title="小智同学" is-link />
-      </van-cell-group>
+      </div>
     </main>
     <!-- 退出按钮 -->
-    <div class="nologin-btn" v-if="isShow">
-      <button class="btn-data" @click="logbtn">退出登录</button>
-    </div>
+    <van-button v-if="isShow" block class="login-btn" @click="logbtn">退出按钮</van-button>
   </div>
 </template>
 
@@ -122,115 +132,107 @@ export default {
 </script>
 
 <style scoped lang="less">
-.banner {
-  height: 200px;
-  background: url(@/assets/banner.png) no-repeat 0 0 / cover;
+.my{
+  background-color: #f5f7f9;
+  height: calc(100vh - 100px);
 }
-.my-data {
+.banner {
+  width: 100%;
+  height: 200px;
+  background: url('@/assets/banner.png') no-repeat 0 0 / cover;
+}
+//用户信息
+.user-info {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding-top: 50px;
-  padding: 15px;
-  padding-top: 40px;
-  :deep(.van-button) {
-    width: 58px;
-    height: 17px;
-    white-space: nowrap;
-    padding: 4px;
+  flex-direction: column;
+
+  > .van-row {
+    flex: 1;
+  }
+  .row-2{
+    .van-col{
+      height: 100%;
+    }
+  }
+  .mobile{
+    font-size: 0.4rem;
+    color: #fff;
+  }
+  .code-btn {
+    width: 1.53333rem;
+    height: 0.42667rem;
+    background: #fff;
+    border-radius: 0.21333rem;
+    font-size: 0.26667rem;
+    color: #666;
+    padding: 0;
   }
 
-  .van-button--normal {
-    padding: 5px;
-  }
-  .data-btn {
-    border-radius: 50px;
-    font-size: 10px;
-    color: #666666;
-  }
-}
-.data-my-login {
-  display: flex;
-  align-items: center;
-  img {
-    width: 66px;
-    height: 66px;
-    border: 2px solid #fff;
-    border-radius: 50%;
-  }
-  p {
-    margin-left: 10px;
-    font-size: 15px;
-    color: #ffffff;
-  }
-}
-.my-login {
-  :deep(.van-grid-item__content) {
-    background-color: transparent;
-  }
-}
-p {
-  -webkit-margin-before: 0;
-  -webkit-margin-after: 0;
-}
-.data-msg {
-  color: #ffffff;
-  span {
-    font-size: 18px;
-  }
-  p {
-    font-size: 12px;
-  }
-}
-.my-login {
-  .van-grid {
-    padding-top: 15px;
-  }
-}
-.my-collect {
-  :deep(.van-grid-item__text) {
-    color: #333333;
-    font-size: 14px;
-    padding-top: 5px;
-  }
-}
-.van-cell-group {
-  margin-top: 3px;
-  padding: 5px 0;
-}
-.nologin-btn {
-  width: 100%;
-  height: 60px;
-  margin-top: 3px;
-  .btn-data {
-    background-color: #fff;
-    border: unset;
-    width: 100%;
+  .code-row {
     height: 100%;
-    color: #d86262;
-    font-size: 15px;
+  }
+  .grid {
+    :deep(.van-grid-item__content) {
+      background-color: unset;
+    }
+  }
+  .van-grid-item {
+    font-size: .34667rem;
+    color: #fff;
+    :deep(.van-grid-item__text) {
+      margin-top: .10667rem;
+      color: #fff;
+    }
   }
 }
-.no-login {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  .no-login-data {
+// 主体区域
+main {
+  .grid {
+    color: #646566;
+    // 字体图标
+    .iconfont {
+      font-size: 0.6rem;
+
+      &.icon-lishi {
+        color: #ffb31d;
+      }
+      &.icon-shoucang {
+        color: #ed5253;
+      }
+    }
+  }
+  .login-btn {
+    :deep(.van-button__text) {
+      color: red;
+    }
+  }
+  .link{
+    padding: 10px 0;
+  }
+
+}
+.login-register{
     display: flex;
     justify-content: center;
-    flex-direction: column;
     align-items: center;
+
+    .wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      color: #fff;
+      img {
+        margin-bottom: 10px;
+      }
+      .mobile-img {
+        width: 132px;
+        height: 132px;
+        margin-bottom: 15px;
+      }
+      .text {
+        font-size: 28px;
+        color: #fff;
+      }
+    }
   }
-  img {
-    width: 66px;
-    height: 66px;
-    border-radius: 50%;
-    border: 2px solid #fff;
-  }
-  span {
-    color: #ffffff;
-    font-size: 14px;
-    margin-top: 5px;
-  }
-}
 </style>
