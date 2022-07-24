@@ -16,7 +16,7 @@
     style="height: 100%"
     position="bottom"
     >
-    <headPortrait />
+    <headPortrait @close="isUpdatePhotoShow = true" />
     </van-popup>
 
     <!-- 内容 -->
@@ -70,7 +70,7 @@ import navBar from '@/components/navBar.vue'
 import headPortrait from './components/headPortrait.vue'
 import nickname from './components/nickname.vue'
 import gender from './components/gender.vue'
-// import date from './components/date.vue'
+import date from './components/date.vue'
 import { UserProfile } from '@/API/user'
 export default {
   data () {
@@ -86,7 +86,7 @@ export default {
     navBar,
     nickname,
     gender,
-    // date,
+    date,
     headPortrait
   },
   created () {
@@ -125,7 +125,7 @@ export default {
 
 <style scoped lang="less">
 .avatar {
-  width: 60px;
-  height: 60px;
+  width: 30px;
+  height: 30px;
 }
 </style>

@@ -144,7 +144,7 @@ export default {
     padding: 5px;
   }
   .data-btn {
-    border-radius: 5px;
+    border-radius: 50px;
     font-size: 10px;
     color: #666666;
   }

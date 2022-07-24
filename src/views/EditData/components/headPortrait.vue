@@ -47,9 +47,9 @@ export default {
     box-sizing: border-box;
     .cancel,
     .confirm {
-      width: 90px;
-      height: 90px;
-      font-size: 30px;
+      width: 45px;
+      height: 45px;
+      font-size: 15px;
       display: flex;
       justify-content: center;
       align-items: center;
