@@ -333,7 +333,7 @@ p {
     font-weight: 700;
     color: rgb(2, 2, 2);
     font-size: 0.53333rem;
-    padding-top: 20px;
+    padding-top: 70px;
   }
 }
 .aut-data {
@@ -341,7 +341,7 @@ p {
   align-items: center;
   background-color: #fff;
   justify-content: space-between;
-  padding: 0.53333rem 20px;
+  padding: 20px 20px;
   .aut-data-name {
     display: flex;
     font-size: 13px;

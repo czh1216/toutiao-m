@@ -33,8 +33,8 @@
           v-if="ele.is_liking"
           @click="noCommentsThumb(ele.com_id)"
           slot="right-icon"
-          name="thumb-circle"
-          color="#4dc4ff"
+          name="good-job"
+          color="red"
           >赞{{ ele.like_count }}</van-icon
         >
       </van-cell>
@@ -80,8 +80,8 @@
             v-if="ele.is_liking"
             @click="noCommentsThumb(ele.com_id)"
             slot="right-icon"
-            name="thumb-circle"
-            color="#4dc4ff"
+            name="good-job"
+            color="red"
             >赞{{ ele.like_count }}</van-icon
           >
         </van-cell>
